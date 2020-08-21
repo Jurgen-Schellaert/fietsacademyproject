@@ -8,6 +8,7 @@ import java.util.Optional;
 public class JpaDocentRepository implements DocentRepository{
 
     private final EntityManager manager;
+
     JpaDocentRepository(EntityManager manager){
         this.manager = manager;
     }
@@ -15,5 +16,10 @@ public class JpaDocentRepository implements DocentRepository{
     @Override
     public Optional<Docent> findById(long id){
         return Optional.ofNullable(manager.find(Docent.class, id));
+    }
+
+    @Override
+    public void create(Docent docent){
+        manager.persist(docent);
     }
 }
