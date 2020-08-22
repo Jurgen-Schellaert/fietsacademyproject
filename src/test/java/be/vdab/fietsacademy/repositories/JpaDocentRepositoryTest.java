@@ -15,17 +15,18 @@ import java.math.BigDecimal;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
+
 @DataJpaTest
 @Import(JpaDocentRepository.class)
 @Sql("/insertDocent.sql")
-class JpaDocentenRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
+class JpaDocentRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
 
     private final JpaDocentRepository repository;
     private final static String DOCENTEN = "docenten";
     private Docent docent;
     private final EntityManager manager;
 
-    public JpaDocentenRepositoryTest(JpaDocentRepository repository, EntityManager manager) {
+    public JpaDocentRepositoryTest(JpaDocentRepository repository, EntityManager manager) {
         this.repository = repository;
         this.manager = manager;
     }
