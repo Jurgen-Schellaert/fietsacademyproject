@@ -23,7 +23,7 @@ class DefaultDocentService implements DocentService {
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public void opslag(long id, BigDecimal percentage) {
         Optional<Docent> optionalDocent = repository.findById(id);
-        optionalDocent.ifPresentOrElse(d -> d.opslag(percentage), () -> {throw new DocentNietGevondenException();});
+        optionalDocent.ifPresentOrElse(docent -> docent.opslag(percentage), () -> {throw new DocentNietGevondenException();});
         /*if (optionalDocent.isPresent())
             optionalDocent.get().opslag(percentage);
         else

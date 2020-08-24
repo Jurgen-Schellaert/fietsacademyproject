@@ -7,6 +7,8 @@ import java.math.RoundingMode;
 
 @Entity
 @Table(name = "docenten")
+/*@NamedQuery(name = "Docent.findByWeddeBetween", query = "select d from Docent d where d.wedde between :van and :tot " +
+                                                       "order by d.wedde, d.id")*/
 public class Docent {
 
     @Id
