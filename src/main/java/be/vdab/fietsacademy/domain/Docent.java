@@ -4,6 +4,8 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "docenten")
@@ -20,6 +22,10 @@ public class Docent {
     private Geslacht geslacht;
     private BigDecimal wedde;
     private String emailAdres;
+    @ElementCollection
+    @CollectionTable(name = "docentenbijnamen", joinColumns = @JoinColumn(name="docentid"))
+    @Column(name ="bijnaam")
+    private Set<String> bijnamen;
 
     protected Docent() {
     }
@@ -30,6 +36,7 @@ public class Docent {
         this.geslacht = geslacht;
         this.wedde = wedde;
         this.emailAdres = emailAdres;
+        this.bijnamen = new LinkedHashSet<>();
     }
 
     public void opslag(BigDecimal percentage){
@@ -61,5 +68,21 @@ public class Docent {
 
     public String getEmailAdres() {
         return emailAdres;
+    }
+
+    public Set<String> getBijnamen() {
+        return Set.copyOf(bijnamen);
+    }
+
+    public boolean addBijnaam(String bijnaam) {
+        // if bijnaam happens to be null, the following test will throw a NullPointerException as isEmpty()/isBlank()
+        // cannot inspect null
+        if (bijnaam.isBlank() || bijnaam.isEmpty())
+            throw new IllegalArgumentException();
+        return bijnamen.add(bijnaam);
+    }
+
+    public boolean removeBijnaam(String bijnaam){
+        return bijnamen.remove(bijnaam);
     }
 }
