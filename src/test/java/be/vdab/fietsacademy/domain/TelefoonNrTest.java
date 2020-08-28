@@ -18,7 +18,7 @@ public class TelefoonNrTest {
 
     @Test
     void telefoonNrsZijnGelijkAlsHunNummersGelijkZijn(){
-        assertThat(nummer1.equals(nogeensnummer1));
+        assertThat(nummer1).isEqualTo(nogeensnummer1);
     }
 
     @Test
