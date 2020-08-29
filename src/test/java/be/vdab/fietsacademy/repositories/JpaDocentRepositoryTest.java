@@ -39,8 +39,8 @@ class JpaDocentRepositoryTest extends AbstractTransactionalJUnit4SpringContextTe
     @BeforeEach
     void beforeEach(){
         campus = new Campus("test", new Adres("test", "test", "test", "test"));
-        docent = new Docent("test", "test", Geslacht.MAN, BigDecimal.TEN, "test@test.be"/*, campus*/);
-        campus.add(docent);
+        docent = new Docent("test", "test", Geslacht.MAN, BigDecimal.TEN, "test@test.be", campus);
+        //campus.add(docent);
     }
 
     private long idVanTestMan(){
@@ -73,6 +73,10 @@ class JpaDocentRepositoryTest extends AbstractTransactionalJUnit4SpringContextTe
 
     @Test
     void create(){
+       // the campus db insert (persist(campus) is mandatory - create(docent) will fail if the docent it holds exists
+       // only in memory (=transient), not in the database. The Exception message would state this:
+       //Caused by: org.hibernate.TransientPropertyValueException: Not-null property references a transient value - transient
+       //instance must be saved before current operation : be.vdab.fietsacademy.domain.Docent.campus -> be.vdab.fietsacademy.domain.Campus
         manager.persist(campus);
         repository.create(docent);
         manager.flush();
@@ -93,7 +97,6 @@ class JpaDocentRepositoryTest extends AbstractTransactionalJUnit4SpringContextTe
         assertThat(super.jdbcTemplate.queryForObject(
                 "select campusid from docenten where id =?", Long.class, docent.getId()))
                     .isEqualTo(campus.getId());
-        assertThat(campus.getDocenten().contains(docent)).isTrue();
     }
 
     @Test
@@ -169,12 +172,11 @@ class JpaDocentRepositoryTest extends AbstractTransactionalJUnit4SpringContextTe
                 "select bijnaam from docentenbijnamen where docentid = ?", String.class, docent.getId()))
                     .isEqualTo("test");
     }
-/*
+
     @Test
     void campusLazyLoaded(){
         Docent docent = repository.findById(idVanTestMan()).get();
         assertThat(docent.getCampus().getNaam()).isEqualTo("test");
     }
-    */
 
 }
