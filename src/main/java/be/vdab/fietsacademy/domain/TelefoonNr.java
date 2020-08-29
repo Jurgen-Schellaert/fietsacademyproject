@@ -3,7 +3,6 @@ package be.vdab.fietsacademy.domain;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Embeddable;
-import java.util.Objects;
 
 @Embeddable
 @Access(AccessType.FIELD)

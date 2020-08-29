@@ -41,6 +41,8 @@ public class Campus {
         return adres;
     }
 
+
+
     public Set<TelefoonNr> getTelefoonNrs(){
         return Set.copyOf(telefoonNrs);
     }
