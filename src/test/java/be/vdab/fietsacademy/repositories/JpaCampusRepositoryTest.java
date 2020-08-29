@@ -15,6 +15,7 @@ import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 @DataJpaTest
 @Import(JpaCampusRepository.class)
 @Sql("/insertCampus.sql")
+@Sql("/insertDocent.sql")
 class JpaCampusRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
 
     private final JpaCampusRepository repository;
@@ -53,4 +54,12 @@ class JpaCampusRepositoryTest extends AbstractTransactionalJUnit4SpringContextTe
                 .containsOnly(new TelefoonNr("1", false, "test"));
     }
 
+    @Test
+    void docentenLazyLoaded(){
+        assertThat(repository.findById(idOfTestCampus()).get().getDocenten())
+                .hasSize(2)
+                .first()
+                .extracting(docent -> docent.getVoornaam())
+                .isEqualTo("testM");
+    }
 }

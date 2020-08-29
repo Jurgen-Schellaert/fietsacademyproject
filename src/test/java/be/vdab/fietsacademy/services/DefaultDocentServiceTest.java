@@ -36,7 +36,7 @@ public class DefaultDocentServiceTest {
                 "test",
                 Geslacht.MAN,
                 BigDecimal.valueOf(100),
-                "test@test.be", campus);
+                "test@test.be"/*, campus*/);
         service = new DefaultDocentService(repository);
     }
 

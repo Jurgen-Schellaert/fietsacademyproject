@@ -26,21 +26,21 @@ public class Docent {
     @CollectionTable(name = "docentenbijnamen", joinColumns = @JoinColumn(name="docentid"))
     @Column(name ="bijnaam")
     private Set<String> bijnamen;
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    /*@ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "campusid")
     private Campus campus;
-
+*/
     protected Docent() {
     }
 
-    public Docent(String voornaam, String familienaam, Geslacht geslacht, BigDecimal wedde, String emailAdres, Campus campus) {
+    public Docent(String voornaam, String familienaam, Geslacht geslacht, BigDecimal wedde, String emailAdres /*, Campus campus*/) {
         this.voornaam = voornaam;
         this.familienaam = familienaam;
         this.geslacht = geslacht;
         this.wedde = wedde;
         this.emailAdres = emailAdres;
         this.bijnamen = new LinkedHashSet<>();
-        setCampus(campus);
+        /*setCampus(campus);*/
     }
 
     public void opslag(BigDecimal percentage){
@@ -89,12 +89,26 @@ public class Docent {
     public boolean removeBijnaam(String bijnaam){
         return bijnamen.remove(bijnaam);
     }
-
+/*
     public Campus getCampus() {
         return campus;
     }
 
     public final void setCampus(Campus campus) {
         this.campus = campus;
+    }*/
+
+    @Override
+    public boolean equals(Object o){
+        if (o instanceof Docent) {
+            Docent andereDocent = (Docent) o;
+            return emailAdres.equalsIgnoreCase(andereDocent.emailAdres);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode(){
+        return emailAdres == null? 0 : emailAdres.toLowerCase().hashCode();
     }
 }
