@@ -12,6 +12,14 @@ import java.util.Set;
 @Table(name = "docenten")
 /*@NamedQuery(name = "Docent.findByWeddeBetween", query = "select d from Docent d where d.wedde between :van and :tot " +
                                                        "order by d.wedde, d.id")*/
+@NamedEntityGraph(name = "Docent.MET_CAMPUS", attributeNodes = @NamedAttributeNode("campus"))
+@NamedEntityGraph(name = "Docent.metCampusEnVerantwoordelijkheden",
+                    attributeNodes = {@NamedAttributeNode("campus"), @NamedAttributeNode("verantwoordelijkheden")})
+/*
+@NamedEntityGraph(name = "Docent.metCampusEnManager",
+                   attributeNodes = @NamedAttributeNode(value = "campus", subgraph = "metManager"),
+                   subgraphs = @NamedSubgraph(name = "metManager", attributeNodes = @NamedAttributeNode("manager")))
+*/
 public class Docent {
 
     @Id
@@ -32,6 +40,7 @@ public class Docent {
     private Campus campus;
     @ManyToMany(mappedBy = "docenten")
     private Set<Verantwoordelijkheid> verantwoordelijkheden;
+    public static final String MET_CAMPUS = "Docent.metCampus";
 
     protected Docent() {
     }
