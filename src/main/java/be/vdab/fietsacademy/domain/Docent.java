@@ -1,9 +1,11 @@
 package be.vdab.fietsacademy.domain;
 
 import javax.persistence.*;
+import javax.print.Doc;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -29,6 +31,9 @@ public class Docent {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "campusid")
     private Campus campus;
+    @ManyToMany(mappedBy = "docenten")
+    private Set<Verantwoordelijkheid> verantwoordelijkheden;
+
     protected Docent() {
     }
 
@@ -40,6 +45,7 @@ public class Docent {
         this.emailAdres = emailAdres;
         this.bijnamen = new LinkedHashSet<>();
         setCampus(campus);
+        verantwoordelijkheden = new LinkedHashSet<>();
     }
 
     public void opslag(BigDecimal percentage){
@@ -97,6 +103,25 @@ public class Docent {
         if (!campus.getDocenten().contains(this))
             campus.add(this);
         this.campus = campus;
+    }
+
+    public boolean add(Verantwoordelijkheid verantwoordelijkheid){
+        boolean added = verantwoordelijkheden.add(verantwoordelijkheid);
+        if (!verantwoordelijkheid.getDocenten().contains(this))
+            verantwoordelijkheid.add(this);
+        return added;
+    }
+
+
+    public boolean remove(Verantwoordelijkheid verantwoordelijkheid){
+        boolean removed = verantwoordelijkheden.remove(verantwoordelijkheid);
+        if (verantwoordelijkheid.getDocenten().contains(this))
+            verantwoordelijkheid.remove(this);
+        return removed;
+    }
+
+    public Set<Verantwoordelijkheid> getVerantwoordelijkheden(){
+        return Collections.unmodifiableSet(verantwoordelijkheden);
     }
 
     @Override

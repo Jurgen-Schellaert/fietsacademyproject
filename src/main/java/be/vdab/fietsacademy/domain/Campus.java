@@ -73,9 +73,10 @@ public class Campus {
         return toegevoegd;
     }
 
-    public boolean remove(Docent docent) {
-        return docenten.remove(docent);
-    }
+    //  no remove(Docent d) method required - the only time we want/need to remove a d instance from
+    // the docenten list is inside the add(Docent d) method of the current class, which can
+    // obviously address that variable directly
+    // besides, it saves the trouble of having to implement a matching remove(campus) method inside class Campus
 
     @Override
     public boolean equals(Object o) {

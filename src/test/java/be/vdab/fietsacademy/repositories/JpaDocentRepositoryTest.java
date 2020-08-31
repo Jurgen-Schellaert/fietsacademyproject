@@ -1,9 +1,6 @@
 package be.vdab.fietsacademy.repositories;
 
-import be.vdab.fietsacademy.domain.Adres;
-import be.vdab.fietsacademy.domain.Campus;
-import be.vdab.fietsacademy.domain.Docent;
-import be.vdab.fietsacademy.domain.Geslacht;
+import be.vdab.fietsacademy.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -22,7 +19,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
 @Import(JpaDocentRepository.class)
 @Sql("/insertCampus.sql")
+@Sql("/insertVerantwoordelijkheid.sql")
 @Sql("/insertDocent.sql")
+@Sql("/insertDocentVerantwoordelijkheid.sql")
 class JpaDocentRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
 
     private final JpaDocentRepository repository;
@@ -178,5 +177,40 @@ class JpaDocentRepositoryTest extends AbstractTransactionalJUnit4SpringContextTe
         Docent docent = repository.findById(idVanTestMan()).get();
         assertThat(docent.getCampus().getNaam()).isEqualTo("test");
     }
+
+    /*
+    // shows that updating an entity (here its wedde column) will propagate to the DB even when
+    // it its not inside a service class - but one will have to call manager.flush() to make
+    // sure that the update is made before it is read by the assertion test
+    @Test
+    void slaOp(){
+        Docent d = repository.findById(idVanTestMan()).get();
+        d.opslag(BigDecimal.valueOf(20));
+        manager.flush();
+        assertThat(super.jdbcTemplate.queryForObject(
+                "select wedde from docenten where id = ?", BigDecimal.class, idVanTestMan()))
+                .isEqualByComparingTo("1200");
+    }
+    */
+
+    @Test
+    void verantwoordelijkhedenLezen(){
+        assertThat(repository.findById(idVanTestMan()).get().getVerantwoordelijkheden())
+                .containsOnly(new Verantwoordelijkheid(("test")));
+    }
+
+    @Test
+    void verantwoordelijkheidToevoegen(){
+        Verantwoordelijkheid verantwoordelijkheid = new Verantwoordelijkheid("test2");
+        manager.persist(verantwoordelijkheid);
+        manager.persist(campus);
+        repository.create(docent);
+        docent.add(verantwoordelijkheid);
+        manager.flush();
+        assertThat(super.jdbcTemplate.queryForObject("select verantwoordelijkheidid from docentenverantwoordelijkheden " +
+                                                        "where docentid = ?", Long.class, docent.getId()))
+                                        .isEqualTo(verantwoordelijkheid.getId());
+    }
+
 
 }
