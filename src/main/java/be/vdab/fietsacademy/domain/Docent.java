@@ -1,7 +1,6 @@
 package be.vdab.fietsacademy.domain;
 
 import javax.persistence.*;
-import javax.print.Doc;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
