@@ -21,4 +21,5 @@ public interface DocentRepository {
     BigDecimal findGrootsteWedde();
     List<AantalDocentenPerWedde> findAantalDocentenPerWedde();
     int algemeneOpslag(BigDecimal percentage);
+    Optional<Docent> findByIdWithLock(long id);
 }
